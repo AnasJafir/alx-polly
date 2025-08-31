@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   
   // Refresh session if expired - required for Server Components
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-refresh-tokens
