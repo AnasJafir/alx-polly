@@ -2,11 +2,31 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/contexts/auth-context"
 
 export function Navigation() {
-  // TODO: Replace with actual authentication state
-  const isAuthenticated = false
-  const userName = "User"
+  const { user, loading, signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+  }
+
+  if (loading) {
+    return (
+      <nav className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <Link href="/" className="text-xl font-bold text-gray-900">
+                ALX Polling
+              </Link>
+            </div>
+            <div className="animate-pulse bg-gray-200 h-8 w-32 rounded"></div>
+          </div>
+        </div>
+      </nav>
+    )
+  }
 
   return (
     <nav className="bg-white shadow-sm border-b">
@@ -25,19 +45,23 @@ export function Navigation() {
             >
               Browse Polls
             </Link>
-            <Link 
-              href="/polls/create" 
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Create Poll
-            </Link>
+            {user && (
+              <Link 
+                href="/polls/create" 
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Create Poll
+              </Link>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
-            {isAuthenticated ? (
+            {user ? (
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">Welcome, {userName}</span>
-                <Button variant="outline" size="sm">
+                <span className="text-sm text-gray-700">
+                  Welcome, {user.email}
+                </span>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
                   Sign Out
                 </Button>
               </div>

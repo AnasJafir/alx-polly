@@ -1,8 +1,21 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function Home() {
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Hero Section */}
@@ -20,9 +33,15 @@ export default function Home() {
             <Button size="lg" asChild>
               <Link href="/polls">Browse Polls</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/polls/create">Create Poll</Link>
-            </Button>
+            {user ? (
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/polls/create">Create Poll</Link>
+              </Button>
+            ) : (
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/auth/login">Sign In</Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -77,18 +96,34 @@ export default function Home() {
       <div className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Ready to Get Started?
+            {user ? "Ready to Create More Polls?" : "Ready to Get Started?"}
           </h2>
           <p className="text-lg text-gray-600 mb-8">
-            Join the community and start creating polls today!
+            {user 
+              ? "Keep engaging with the community and share your thoughts!"
+              : "Join the community and start creating polls today!"
+            }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
-              <Link href="/auth/register">Sign Up Free</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/polls">Explore Polls</Link>
-            </Button>
+            {user ? (
+              <>
+                <Button size="lg" asChild>
+                  <Link href="/polls/create">Create New Poll</Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link href="/polls">View All Polls</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="lg" asChild>
+                  <Link href="/auth/register">Sign Up Free</Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link href="/polls">Explore Polls</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
