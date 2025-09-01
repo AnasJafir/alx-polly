@@ -97,3 +97,30 @@ export interface PollFilters {
   limit?: number
   offset?: number
 }
+
+export type CreatePollFormData = {
+  title: string
+  question: string
+  description: string
+  poll_type: PollType
+  is_public: boolean
+  allow_multiple_votes: boolean
+  max_votes_per_option: number
+  expires_at: string
+  options: string[]
+}
+
+export type CreatePoll = {
+  title: string
+  question: string
+  description: string
+  poll_type: PollType
+  is_public: boolean
+  allow_multiple_votes: boolean
+  max_votes_per_option: number
+  expires_at: string
+  options: {
+    text: string
+    order_index: number
+  }[]
+}

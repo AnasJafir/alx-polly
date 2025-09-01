@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/contexts/auth-context"
-import { PollType } from "@/lib/types"
+import { PollType, CreatePollFormData } from "@/lib/types"
 
 export function CreatePollForm() {
   const { user } = useAuth()
@@ -14,7 +14,7 @@ export function CreatePollForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreatePollFormData>({
     title: "",
     question: "",
     description: "",
