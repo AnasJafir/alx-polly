@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { submitVote } from '@/lib/database'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
-import { isSameOriginRequest } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
   try {
-    if (!isSameOriginRequest(request)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
     const supabase = await createServerSupabaseClient()
     
     // Get the current user
