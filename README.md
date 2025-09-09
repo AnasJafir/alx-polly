@@ -68,9 +68,16 @@ alx-polly/
 ### 2) Environment variables
 Create a `.env.local` file in `alx-polly/` with:
 
+```bash
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...your-anon-key...
 
+# Server-only (never expose to the client)
+# SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...your-service-role-key...
+```
 
-These values are used by the Supabase SSR helpers on both server and client (only the anon key is used by the app; keep RLS on).
+The anon key is used on the client; the service role key is server-only and must never be exposed to the browser.
 
 ### 3) Install dependencies
 
