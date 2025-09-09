@@ -1,6 +1,18 @@
 # ALX Polling App
 
-A modern, interactive polling application built with Next.js 15, TypeScript, and Tailwind CSS. Create polls, vote on them, and engage with the ALX community.
+A modern, interactive polling application built with Next.js (App Router), TypeScript, Tailwind CSS, and Supabase. Create polls, vote on them, and engage with the ALX community.
+
+## Project Overview
+
+ALX Polling lets authenticated users create and manage polls and allows the community to vote via shareable links (and QR codes). The app adopts a Server Components–first architecture: data fetching and access control run on the server; client interactivity is reserved for forms and small UI interactions.
+
+### Tech Stack
+- **Framework**: Next.js (App Router) with Server Components
+- **Language**: TypeScript
+- **Database & Auth**: Supabase (Postgres + Auth)
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **State**: Server state via Server Components; local UI state via Client Components
+- **Utilities**: Supabase SSR helpers; optional QR code generator (e.g., `qrcode.react`)
 
 ## Features
 
@@ -45,7 +57,29 @@ alx-polly/
 └── tsconfig.json               # TypeScript configuration
 ```
 
-## Getting Started
+## Setup
+
+### 1) Supabase project setup
+1. Create a new Supabase project.
+2. Apply the schema in `database/schema.sql` (and optional `fix-profiles.sql`).
+3. Enable Row Level Security (RLS) on all application tables and add policies per your requirements (owner-only updates for polls, voter-only writes for votes, etc.).
+4. Ensure Email Confirmations are enabled if you require confirmed users to create/vote.
+
+### 2) Environment variables
+Create a `.env.local` file in `alx-polly/` with:
+
+```bash
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...your-anon-key...
+
+# Server-only (never expose to the client)
+# SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...your-service-role-key...
+```
+
+The anon key is used on the client; the service role key is server-only and must never be exposed to the browser.
+
+### 3) Install dependencies
 
 ### Prerequisites
 
@@ -65,12 +99,26 @@ cd alx-polly
 npm install
 ```
 
-3. Run the development server:
+### 4) Run the development server
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Usage
+
+### Creating a poll
+1. Sign in at `/auth/login` (or register at `/auth/register`).
+2. Navigate to `/polls/create`.
+3. Fill in the title, question, and at least two options, then submit.
+
+### Voting on a poll
+1. Open a poll detail page (e.g., `/polls/{id}`).
+2. Select one or more options (depending on poll settings) and submit your vote.
+
+### Sharing polls
+- Copy the poll link from the poll detail page. Optionally render a QR code using a QR component for easy sharing.
 
 ## Available Routes
 
@@ -125,6 +173,24 @@ The app uses Tailwind CSS with a custom design system:
 - [ ] Advanced analytics and charts
 - [ ] Dark mode support
 - [ ] Mobile app (React Native)
+
+## Running and Testing Locally
+
+### Run the app
+```bash
+npm run dev
+# or
+npm run build && npm start
+```
+
+### Run tests
+```bash
+npm test
+```
+
+Notes:
+- Some tests may require a running local dev server or mocked Supabase responses.
+- Ensure environment variables are present for components that initialize Supabase clients.
 
 ## Contributing
 
